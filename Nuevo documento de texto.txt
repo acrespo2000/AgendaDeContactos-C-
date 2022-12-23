@@ -1,0 +1,59 @@
+	char frase[MAX_TEXTO];
+	char cadena[MAX_TEXTO];
+	int p0, p1, p2, p3, p4, p5, ps;
+	char * puntero;
+	
+	
+	FILE* f;
+	f = fopen("AgendaContactos.txt","r");
+	if(f==NULL){
+		printf("No se ha podido abrir fichero. ");
+		return 0;
+	}
+	fgets(frase,MAX_TEXTO,f);
+	frase[strlen(frase)-1]='\0';
+	ocupacion=atoi(frase);
+	
+	
+	for(j=0; j<ocupacion; j++){
+		ps=0;
+		fgets(frase,MAX_TEXTO,f);
+		frase[strlen(frase)-1]='\0';
+		
+		puntero = strtok(frase,"#");
+		strcpy(Lista[j].nombre, puntero);
+		
+		for(i=0; i<=6; i++){
+			puntero = strtok(NULL,"#");
+			if(i==1){
+				Lista[j].dia=puntero;
+			}else if(i==2){
+				Lista[j].mes=puntero;
+			}else if(i==3){
+				Lista[j].ano=puntero;
+			}else if(i==4){
+				strcpy(Lista[j].nif, puntero);
+			}else if(i==5){
+				Lista[j].tipo=puntero;
+			}else if(i==6){
+				strcpy(Lista[j].telefono, puntero);
+			}else{
+				printf("error");
+			}	
+		}
+	}
+		fclose(f);
+	
+		//Leer el fichero en modo binario
+		f=fopen("AgendaContactos.bin","rb");
+		if(f==NULL){
+			printf("No se ha podido abrir fichero. ");
+			return 0;
+		}
+		//Voy leyendo del fichero
+		fread(Lista, sizeof(Contacto),ocupacion,f);
+		fclose(f);
+		
+		
+		printf("\n");
+		printf("Se han importado los contactos guardados correctamente\n");
